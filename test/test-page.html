@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>DSH Browser Control 测试页</title>
+    <style>
+      body { font-family: system-ui, "Microsoft YaHei", sans-serif; max-width: 720px; margin: 32px auto; padding: 0 16px; line-height: 1.7; }
+      h1 { font-size: 26px; }
+      section { border: 1px solid #ddd; border-radius: 10px; padding: 16px; margin: 18px 0; }
+      label { display: block; margin: 10px 0 4px; color: #444; }
+      input, textarea, select { width: 100%; padding: 8px; box-sizing: border-box; font: inherit; }
+      button { padding: 8px 16px; font: inherit; cursor: pointer; }
+      #output { margin-top: 12px; padding: 10px; background: #f2f7ff; border-radius: 8px; min-height: 22px; }
+      .row { display: flex; gap: 10px; align-items: center; }
+      .tall { height: 1400px; background: linear-gradient(#fff, #eef; border-radius: 8px; }
+      a { color: #1a56db; }
+    </style>
+  </head>
+  <body>
+    <h1>DSH Browser Control 测试页</h1>
+    <p>
+      本页用于验证 <code>browser_snapshot</code>、<code>browser_click</code>、<code>browser_type</code>、
+      <code>browser_extract</code>、<code>browser_screenshot</code> 等工具。回链：
+      <a id="page2-link" href="/page2.html">打开第二页</a>
+    </p>
+
+    <section>
+      <h2>表单</h2>
+      <label for="name">名字</label>
+      <input id="name" name="name" type="text" placeholder="请输入名字" />
+      <label for="note">备注</label>
+      <textarea id="note" name="note" placeholder="多行文本"></textarea>
+      <label for="topic">主题</label>
+      <select id="topic" name="topic">
+        <option value="a">主题 A</option>
+        <option value="b">主题 B</option>
+      </select>
+      <div class="row" style="margin-top: 12px">
+        <button id="greet" type="button">打招呼</button>
+        <button id="toggle" type="button">切换隐藏区域</button>
+        <label style="display: flex; align-items: center; gap: 6px; margin: 0">
+          <input id="agree" type="checkbox" style="width: auto" /> 同意
+        </label>
+      </div>
+      <div id="output" role="status">等待操作…</div>
+      <div id="hidden-area" style="display: none; margin-top: 12px; padding: 10px; background: #fff4e5">
+        隐藏区域已显示
+      </div>
+      <div id="delayed" style="display: none; margin-top: 12px; padding: 10px; background: #e8f7ee">
+        延迟加载的内容
+      </div>
+    </section>
+
+    <section>
+      <h2>列表</h2>
+      <ul>
+        <li>第一项：<a href="#one">链接一</a></li>
+        <li>第二项：<a href="#two">链接二</a></li>
+        <li>第三项：<a href="/page2.html?from=list">第二页入口</a></li>
+      </ul>
+    </section>
+
+    <section class="tall">
+      <h2>长页面区域</h2>
+      <p>向下滚动可以看到这段文字和底部按钮。</p>
+      <p><button id="bottom-button" type="button">底部按钮</button></p>
+    </section>
+
+    <script>
+      const output = document.getElementById('output')
+      document.getElementById('greet').addEventListener('click', () => {
+        const name = document.getElementById('name').value.trim() || '陌生人'
+        output.textContent = `Hello, ${name}!`
+      })
+      document.getElementById('toggle').addEventListener('click', () => {
+        const area = document.getElementById('hidden-area')
+        area.style.display = area.style.display === 'none' ? 'block' : 'none'
+      })
+      document.getElementById('bottom-button').addEventListener('click', () => {
+        output.textContent = '底部按钮被点击'
+      })
+      setTimeout(() => {
+        document.getElementById('delayed').style.display = 'block'
+      }, 900)
+    </script>
+  </body>
+</html>

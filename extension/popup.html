@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DSH Browser Control</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <img src="icons/icon48.png" alt="" width="28" height="28" />
+      <div>
+        <h1>DSH Browser Control</h1>
+        <p>DeepSeek Harness 浏览器控制桥</p>
+      </div>
+    </header>
+
+    <section class="status">
+      <span id="dot" class="dot"></span>
+      <div>
+        <strong id="stateText">未连接</strong>
+        <p id="detailText">等待连接 DSH 插件</p>
+      </div>
+    </section>
+
+    <form id="settingsForm">
+      <label>
+        <span>服务器地址</span>
+        <input id="serverUrl" type="text" spellcheck="false" placeholder="ws://127.0.0.1:17373" />
+      </label>
+      <label>
+        <span>访问令牌</span>
+        <input id="token" type="password" spellcheck="false" placeholder="粘贴 ~/.dsh/.browser-control-token 的内容" />
+      </label>
+      <label class="checkbox">
+        <input id="autoReconnect" type="checkbox" />
+        <span>断线后自动重连</span>
+      </label>
+      <div class="actions">
+        <button id="connectBtn" type="button" class="primary">连接</button>
+        <button id="disconnectBtn" type="button">断开</button>
+        <button id="saveBtn" type="submit">保存并连接</button>
+      </div>
+    </form>
+
+    <p class="hint">
+      先在 DSH 中启用 <code>dsh-browser-control</code> 插件。插件首次启动会在
+      <code>~/.dsh/.browser-control-token</code> 生成随机令牌，把它粘贴到上方“令牌”里保存即可；连接成功后模型就能使用
+      <code>browser_*</code> 工具操作当前浏览器。
+    </p>
+
+    <footer>
+      <span id="version"></span>
+      <span id="browser"></span>
+    </footer>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

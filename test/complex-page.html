@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>DSH Browser Control — 复杂组件测试页</title>
+<style>
+  body { font: 14px/1.5 system-ui, sans-serif; margin: 24px; }
+  .box { border: 1px solid #d0d7de; border-radius: 8px; padding: 12px; margin: 12px 0; }
+  .slider { width: 300px; height: 24px; background: #e6ebf1; border-radius: 12px; position: relative; }
+  .slider .knob { position: absolute; top: 2px; left: 2px; width: 40px; height: 20px; background: #2d7ff9; border-radius: 10px; cursor: grab; }
+  .menu { display: none; position: absolute; background: #fff; border: 1px solid #d0d7de; padding: 4px 0; list-style: none; margin: 0; min-width: 160px; z-index: 5; }
+  .menu.open { display: block; }
+  .menu li { padding: 6px 12px; cursor: pointer; }
+  .menu li:hover { background: #eef2ff; }
+  .dropdown { position: relative; display: inline-block; }
+  button { padding: 6px 12px; }
+</style>
+</head>
+<body>
+  <h1>复杂组件测试页</h1>
+  <p>用于验证：Shadow DOM、iframe、自定义下拉框、hover 菜单、拖拽滑块、遮挡检测、SPA 异步渲染。</p>
+
+  <div class="box">
+    <h2>1. Shadow DOM（open）</h2>
+    <div id="shadow-host"></div>
+  </div>
+
+  <div class="box">
+    <h2>2. iframe（同源）</h2>
+    <iframe id="frame" src="iframe-child.html" width="420" height="140"></iframe>
+  </div>
+
+  <div class="box">
+    <h2>3. 自定义下拉框</h2>
+    <div class="dropdown">
+      <button id="dd-trigger" aria-haspopup="listbox">请选择模板 ▾</button>
+      <ul class="menu" id="dd-menu" role="listbox">
+        <li role="option">校园气象站GI</li>
+        <li role="option">智能配送站GI</li>
+        <li role="option">绳影飞舞CK</li>
+      </ul>
+    </div>
+    <p id="dd-result">未选择</p>
+  </div>
+
+  <div class="box">
+    <h2>4. hover 菜单（JS 驱动）</h2>
+    <div class="dropdown" id="hover-wrap">
+      <button>鼠标移上来</button>
+      <ul class="menu" id="hover-menu"><li>第一项</li><li>第二项</li></ul>
+    </div>
+  </div>
+
+  <div class="box">
+    <h2>5. 可拖拽滑块</h2>
+    <div class="slider" id="slider"><div class="knob" id="knob" style="left:2px"></div></div>
+    <p>位置：<span id="knob-pos">0</span></p>
+  </div>
+
+  <div class="box">
+    <h2>6. 遮挡检测</h2>
+    <button id="under">被遮住的按钮</button>
+    <div id="overlay" style="position:fixed; inset:0; background:rgba(0,0,0,.25); z-index: 50"></div>
+    <button onclick="document.getElementById('overlay').remove()">移除遮罩</button>
+  </div>
+
+  <div class="box">
+    <h2>7. 异步渲染（2 秒后出现）</h2>
+    <div id="late">（加载中…）</div>
+  </div>
+
+  <script>
+    // 1. Shadow DOM
+    const host = document.getElementById('shadow-host')
+    const shadow = host.attachShadow({ mode: 'open' })
+    shadow.innerHTML = `
+      <style>button{background:#1f883d;color:#fff;border:0;padding:8px 14px;border-radius:6px}</style>
+      <p>这段内容在 Shadow DOM 里</p>
+      <button id="shadow-btn">Shadow 按钮</button>
+      <div id="card-list"></div>`
+    shadow.getElementById('shadow-btn').addEventListener('click', () => {
+      shadow.getElementById('card-list').textContent = 'Shadow 按钮已被点击'
+    })
+
+    // 3. 自定义下拉框
+    const ddTrigger = document.getElementById('dd-trigger')
+    const ddMenu = document.getElementById('dd-menu')
+    ddTrigger.addEventListener('click', () => ddMenu.classList.toggle('open'))
+    ddMenu.addEventListener('click', (event) => {
+      if (event.target.tagName !== 'LI') return
+      document.getElementById('dd-result').textContent = `已选择：${event.target.textContent}`
+      ddMenu.classList.remove('open')
+    })
+
+    // 4. hover 菜单
+    const hoverWrap = document.getElementById('hover-wrap')
+    const hoverMenu = document.getElementById('hover-menu')
+    hoverWrap.addEventListener('mouseenter', () => hoverMenu.classList.add('open'))
+    hoverWrap.addEventListener('mouseleave', () => hoverMenu.classList.remove('open'))
+
+    // 5. 拖拽滑块
+    const slider = document.getElementById('slider')
+    const knob = document.getElementById('knob')
+    let dragging = false
+    let offset = 0
+    knob.addEventListener('pointerdown', (event) => {
+      dragging = true
+      offset = event.clientX - knob.getBoundingClientRect().left
+      knob.setPointerCapture(event.pointerId)
+    })
+    slider.addEventListener('pointermove', (event) => {
+      if (!dragging) return
+      const rect = slider.getBoundingClientRect()
+      const left = Math.max(0, Math.min(rect.width - knob.offsetWidth, event.clientX - rect.left - offset))
+      knob.style.left = `${left}px`
+      document.getElementById('knob-pos').textContent = String(Math.round(left))
+    })
+    slider.addEventListener('pointerup', () => { dragging = false })
+
+    // 7. 异步渲染
+    setTimeout(() => {
+      document.getElementById('late').innerHTML = '<button id="late-btn">异步按钮</button>'
+    }, 2000)
+  </script>
+</body>
+</html>

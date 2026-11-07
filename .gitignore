@@ -1,0 +1,16 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# self-test artifacts
+selftest-ext/
+dsh-selftest-*
+
+# logs
+*.log
+
+# editor / OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

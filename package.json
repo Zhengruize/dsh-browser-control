@@ -1,0 +1,55 @@
+{
+  "name": "dsh-browser-control",
+  "version": "0.3.0",
+  "description": "Control a real browser from DeepSeek Harness through a bundled Chrome/Edge extension",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "extension",
+    "cordis.patch.yml",
+    "scripts",
+    "test",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "verify": "node scripts/verify-registration.mjs && node scripts/verify-structure.mjs",
+    "selftest": "node scripts/selftest.mjs"
+  },
+  "license": "Apache-2.0",
+  "author": "Zhengruize",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zhengruize/dsh-browser-control.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Zhengruize/dsh-browser-control/issues"
+  },
+  "homepage": "https://github.com/Zhengruize/dsh-browser-control#readme",
+  "keywords": [
+    "deepseek-harness",
+    "dsh-plugin",
+    "browser-automation",
+    "chrome-extension",
+    "mcp-like-tools"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "~4.0.4"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}

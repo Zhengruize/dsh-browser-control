@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "DSH Browser Control",
+  "version": "0.3.0",
+  "description": "将浏览器连接到 DeepSeek Harness 的 dsh-browser-control 插件，让模型操作标签页、点击、输入、拖拽、截图与读取页面（支持 iframe、Shadow DOM 与可信输入）。",
+  "minimum_chrome_version": "116",
+  "permissions": ["tabs", "scripting", "storage", "alarms", "activeTab", "webNavigation", "debugger"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "DSH Browser Control",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}

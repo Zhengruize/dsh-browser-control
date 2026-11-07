@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>iframe 子页</title>
+<style>body{font:13px system-ui;margin:12px}button{padding:6px 12px}</style>
+</head>
+<body>
+  <p>这是同源 iframe 内部的内容。</p>
+  <button id="frame-btn">iframe 里的按钮</button>
+  <p id="frame-result">尚未点击</p>
+  <script>
+    document.getElementById('frame-btn').addEventListener('click', () => {
+      document.getElementById('frame-result').textContent = 'iframe 按钮被点击了'
+    })
+  </script>
+</body>
+</html>
